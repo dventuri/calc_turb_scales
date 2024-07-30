@@ -26,16 +26,14 @@ def Taylor(nu, U, L):
 
 if __name__ == "__main__":
 
-    nu_air = 1.8448e-5/1.1843
-    nu_water = 8.9002e-4/997.05
+    rho_gas = 2.1314776275527
+    mu_gas = 9.71207824840234E-6
+    nu_gas = mu_gas/rho_gas
 
-    L = 0.55
-    L_air = L*0.75
-    L_water = L - L_air
+    D_pipe = 0.320675*2
+    L = D_pipe
 
     U = 20.14
-    U_air = U*(L**2)/(L_air**2)
-    U_water = U_air/3
 
     # "Para se ter uma banda inercial bem definida, é necessário que
     #  L/eta > 1000. Então o microcomprimento de Taylor deve ser pelo
@@ -44,33 +42,18 @@ if __name__ == "__main__":
     #  comprimento característico de Kolmogorov e abaixo do comprimento
     #  integral."
 
-    ### AIR
-    Re = Reynolds(nu_air, U_air, L_air)
+    ### Gas Cantera HCs
+    Re = Reynolds(nu_gas, U, L)
     print("Re = ", Re)
 
     #Kolmogorov
-    eta = comp_caract_Kolmogorov(nu_air, U_air, L_air)
+    eta = comp_caract_Kolmogorov(nu_gas, U, L)
     print("eta = ", eta)
 
     #escala de Taylor
-    gamma = Taylor(nu_air, U_air, L_air)
+    gamma = Taylor(nu_gas, U, L)
     print("gamma = ", gamma)
 
-    print("L/eta = ", L_air/eta)
+    print("L/eta = ", L/eta)
     print("gamma/eta = ", gamma/eta)
     print("")
-
-    ### WATER
-    Re = Reynolds(nu_water, U_water, L_water)
-    print("Re = ", Re)
-
-    #Kolmogorov
-    eta = comp_caract_Kolmogorov(nu_water, U_water, L_water)
-    print("eta = ", eta)
-
-    #escala de Taylor
-    gamma = Taylor(nu_water, U_water, L_water)
-    print("gamma = ", gamma)
-
-    print("L/eta = ", L_air/eta)
-    print("gamma/eta = ", gamma/eta)
